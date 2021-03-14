@@ -1,49 +1,36 @@
-name: Publish with Lerna
-
+name: Test Website
 on:
-  push:
-    branches:
-    - master
+  push
+
 
 jobs:
-  Publish_Workflow:
+  publish:
+    name: Test Website
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v2
-      with:
-        # pulls all commits (needed for lerna / semantic release to correctly version) — see https://github.com/lerna/lerna/issues/2542
-        fetch-depth: "0"
-    - name: Git Identity
-      run: |
-        git config --global user.name '@jpvalery'
-        git config --global user.email 'jpvalery@users.noreply.github.com'
-        git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Prepare repository
-      run: git checkout "${GITHUB_REF:11}"
-    - name: Fetch
-      # see https://github.com/lerna/lerna/issues/2542
-      run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-    - name: Pulling
-      run: git pull
-    - name: Install dependencies
-      run: yarn install --pure-lockfile
-    - name: Build
-      run: yarn build
-    - name: Authenticate with Registry
-      run: |
-          yarn logout
-          echo "registry=http://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-          npm whoami
-      env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-    - name: Publish with Lerna
-      run: yarn lerna publish --yes --message 'chore(release)'
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Checkout Project
+      - name: 📚 Checkout
+        uses: actions/checkout@v2
+
+        # Setup NodeJS
+      - name: 🟢 Setup Node ${{ matrix.node_version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+        # Install Dependencies
+      - name: ⏳ Install
+        run: yarn install
+
+        # Build Packages for Testing
+      - name: 🔨 Build Packages
+        run: yarn run build
+
+        # Deploy to GH pages
+      - name: 🚀 Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          full_commit_message: "🚀Deployment by gh-action"
