@@ -18,9 +18,9 @@ Special thanks to [@jpvalery](https://github.com/jpvalery) for helping maintain 
 </div>
 
 <div>
-<a href="https://www.narative.co/design/open/novela" target="_blank">
-<img src="https://raw.githubusercontent.com/narative/gatsby-theme-novela-example/master/assets/gatsby-theme-novela-cta-figma.jpg" alt="gatsby-novela-theme figma link" width="295px" />
-</a>
+  <a href="https://www.narative.co/design/open/novela" target="_blank">
+  <img src="https://raw.githubusercontent.com/narative/gatsby-theme-novela-example/master/assets/gatsby-theme-novela-cta-figma.jpg" alt="gatsby-novela-theme figma link" width="295px" />
+  </a>
 </div>
 
 ### Table of Contents
